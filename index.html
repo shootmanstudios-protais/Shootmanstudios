@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHOOTMAN STUDIOS | Gardien du secret de l'image</title>
+  
+  <!-- Typography Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN & Custom Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js pour les graphiques -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#0D1B3D', dark: '#081026', light: '#162854' },
+            gold: { DEFAULT: '#F5B82E', light: '#F9CF6E', dark: '#D49B1F' },
+          },
+          fontFamily: {
+            serif: ['Fraunces', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0D1B3D; }
+    ::-webkit-scrollbar-thumb { background: #F5B82E; border-radius: 4px; }
+    
+    /* Curseur Magnétique */
+    .custom-cursor { pointer-events: none; fixed: top-0 left-0; z-index: 9999; mix-blend-mode: difference; }
+    
+    /* Animation Marquee Inﬁni */
+    @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+    .animate-marquee { display: flex; width: 200%; animation: marquee 25s linear infinite; }
+    .animate-marquee:hover { animation-play-state: paused; }
+
+    /* Modale de Connexion Glassmorphism */
+    .glass-modal {
+      background: rgba(13, 27, 61, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(245, 184, 46, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-navy text-gray-200 font-sans antialiased overflow-x-hidden select-none">
+
+  <!-- CURSEUR PERSONNALISÉ -->
+  <div id="cursor-dot" class="custom-cursor fixed w-3 h-3 bg-gold rounded-full transition-transform duration-75 pointer-events-none hidden md:block"></div>
+  <div id="cursor-ring" class="custom-cursor fixed w-8 h-8 border border-gold rounded-full transition-all duration-300 pointer-events-none hidden md:block"></div>
+
+  <!-- =================================================================== -->
+  <!-- 🌐 VUE PUBLIQUE : SITE CLIENT SHOOTMAN STUDIOS                      -->
+  <!-- =================================================================== -->
+  <div id="public-site" class="min-h-screen">
+    
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-navy/90 backdrop-blur-md border-b border-white/10" id="main-nav">
+      <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+        <a href="#hero" class="flex items-center gap-3 group">
+          <svg class="w-10 h-10 transition-transform duration-500 group-hover:rotate-12" viewBox="0 0 100 100">
+            <path d="M30 25 L35 15 L42 22 L50 10 L58 22 L65 15 L70 25 L70 32 L30 32 Z" fill="#F5B82E"/>
+            <rect x="30" y="30" width="40" height="4" fill="#F5B82E"/>
+            <path d="M50 35 L75 48 L75 75 L50 90 L25 75 L25 48 Z" fill="#F5B82E"/>
+            <rect x="35" y="45" width="30" height="6" fill="#0D1B3D"/>
+            <rect x="47" y="45" width="6" height="30" fill="#0D1B3D"/>
+          </svg>
+          <div>
+            <span class="font-serif text-xl tracking-wider font-bold text-white block leading-none">SHOOTMAN</span>
+            <span class="text-[9px] tracking-[0.3em] text-gold uppercase font-medium">Studios</span>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest font-medium text-gray-300">
+          <a href="#services" class="hover:text-gold transition-colors">Expertises</a>
+          <a href="#about" class="hover:text-gold transition-colors">Le Studio</a>
+          <a href="#portfolio" class="hover:text-gold transition-colors">Réalisations</a>
+          <a href="#process" class="hover:text-gold transition-colors">Méthode</a>
+        </div>
+
+        <a href="#contact" class="hidden md:inline-flex items-center gap-2 px-6 py-3 border border-gold text-gold font-medium text-xs uppercase tracking-widest rounded-full hover:bg-gold hover:text-navy transition-all duration-300">
+          <span>Réserver un tournage</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-gradient-to-b from-navy-dark via-navy to-navy">
+      <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#F5B82E_1px,transparent_1px)] [background-size:32px_32px]"></div>
+      
+      <div class="max-w-7xl mx-auto px-6 py-12 relative z-10 grid md:grid-cols-12 gap-12 items-center">
+        <div class="md:col-span-7 space-y-8">
+          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-gold/30 bg-gold/10 text-gold text-xs font-semibold tracking-widest uppercase">
+            <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+            <span data-cms="hero_location">Abidjan & International</span> • <span data-cms="hero_since">Depuis 2018</span>
+          </div>
+          
+          <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight" data-cms="hero_title">
+            Gardien du <br/>
+            <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-amber-200">secret</span> de l'image.
+          </h1>
+
+          <p class="text-lg md:text-xl text-gray-300 max-w-xl font-light leading-relaxed" data-cms="hero_desc">
+            Production audiovisuelle d'élite, photographie d'art, couverture événementielle de prestige et stratégie de communication visuelle souveraine.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-5 pt-4">
+            <a href="#contact" class="px-8 py-4 bg-gold text-navy font-bold text-xs uppercase tracking-widest rounded-full hover:bg-gold-light shadow-lg shadow-gold/20 transition-all transform hover:-translate-y-1">
+              Démarrer un Projet
+            </a>
+            <a href="#portfolio" class="px-8 py-4 border border-white/20 text-white font-medium text-xs uppercase tracking-widest rounded-full hover:border-gold hover:text-gold transition-all">
+              Explorer les Oeuvres
+            </a>
+          </div>
+
+          <div class="pt-8 border-t border-white/10 grid grid-cols-2 gap-8 max-w-md">
+            <div>
+              <p class="text-3xl font-serif font-bold text-gold" data-cms="stat1_num">500+</p>
+              <p class="text-xs uppercase tracking-wider text-gray-400 mt-1" data-cms="stat1_label">Projets de Prestige LIVRÉS</p>
+            </div>
+            <div>
+              <p class="text-3xl font-serif font-bold text-gold" data-cms="stat2_num">99.8%</p>
+              <p class="text-xs uppercase tracking-wider text-gray-400 mt-1" data-cms="stat2_label">Satisfaction Clientèle Empire</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-5 relative">
+          <div class="relative z-10 rounded-2xl overflow-hidden border border-gold/30 shadow-2xl group">
+            <img id="cms-img-hero" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1000&q=80" alt="Photographe professionnel en studio" class="w-full h-[550px] object-cover transition-transform duration-700 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+            <div class="absolute bottom-6 left-6 right-6 p-4 bg-navy/90 backdrop-blur-md border border-white/10 rounded-xl">
+              <p class="text-xs text-gold font-semibold uppercase tracking-widest">Équipement Cinéma 8K</p>
+              <p class="text-sm text-white font-medium mt-0.5">Optiques Premium & Captation Aérienne Drone</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE DE DÉFILÉ -->
+    <div class="py-6 bg-gold text-navy font-serif font-bold text-xl uppercase tracking-wider overflow-hidden">
+      <div class="animate-marquee flex gap-12 whitespace-nowrap">
+        <span>✦ Photographie de Portrait</span> <span>✦ Couverture Événementielle</span> <span>✦ Vidéographie Cinématographique</span> <span>✦ Photo Sportive Haute Vitesse</span> <span>✦ Services Scolaires & Académiques</span> <span>✦ Visual Branding Corporate</span> <span>✦ Captation Drone 4K</span>
+        <span>✦ Photographie de Portrait</span> <span>✦ Couverture Événementielle</span> <span>✦ Vidéographie Cinématographique</span> <span>✦ Photo Sportive Haute Vitesse</span> <span>✦ Services Scolaires & Académiques</span> <span>✦ Visual Branding Corporate</span> <span>✦ Captation Drone 4K</span>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section id="services" class="py-28 bg-navy-dark relative">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-20">
+          <span class="text-xs uppercase tracking-[0.3em] text-gold font-semibold block mb-3" data-cms="svc_tag">Domaines d'Excellence</span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white" data-cms="svc_title">L'Art de Capturer l'Inoubliable</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="public-services-grid">
+          <!-- Dynamique via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- À PROPOS -->
+    <section id="about" class="py-28 bg-navy border-t border-b border-white/10 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
+        <div class="md:col-span-5 relative">
+          <img id="cms-img-about" src="https://images.unsplash.com/photo-1589134707248-e8faecf2cb09?auto=format&fit=crop&w=1000&q=80" alt="Vidéaste africain au travail" class="rounded-2xl border border-gold/30 shadow-2xl object-cover h-[500px] w-full"/>
+          <div class="absolute -bottom-6 -right-6 bg-gold text-navy p-6 rounded-2xl hidden sm:block shadow-xl">
+            <p class="font-serif text-3xl font-black">100%</p>
+            <p class="text-xs uppercase font-bold tracking-wider">Engagement Artistique</p>
+          </div>
+        </div>
+
+        <div class="md:col-span-7 space-y-6">
+          <span class="text-xs uppercase tracking-[0.3em] text-gold font-semibold" data-cms="about_tag">Notre Philosophie</span>
+          <h2 class="font-serif text-4xl font-bold text-white leading-tight" data-cms="about_title">Un Héritage Visuel Sculpté avec Précision & Passion</h2>
+          
+          <blockquote class="font-serif text-xl italic text-gold border-l-2 border-gold pl-6 py-2" data-cms="about_quote">
+            « Nous ne prenons pas seulement des images, nous érigeons des sanctuaires temporels pour vos souvenirs. »
+          </blockquote>
+
+          <p class="text-gray-300 leading-relaxed font-light" data-cms="about_p1">
+            Fondé avec l'ambition de redéfinir la création visuelle en Afrique et dans le monde, <strong>SHOOTMAN STUDIOS</strong> fusionne maîtrise technique de pointe, sensibilité artistique profonde et storytelling souverain.
+          </p>
+
+          <p class="text-gray-300 leading-relaxed font-light" data-cms="about_p2">
+            De la féerie d'un mariage royal à la rigueur d'un rapport annuel d'entreprise, nous mettons notre savoir-faire au service des esthètes les plus exigeants.
+          </p>
+
+          <div class="pt-6 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold font-serif text-xl border border-gold/40">S</div>
+            <div>
+              <p class="text-white font-bold" data-cms="founder_name">Directeur Artistique & Fondateur</p>
+              <p class="text-xs text-gold uppercase tracking-wider" data-cms="founder_role">Shootman Studios Empire</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio" class="py-28 bg-navy-dark">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+          <div>
+            <span class="text-xs uppercase tracking-[0.3em] text-gold font-semibold block mb-3" data-cms="pf_tag">Galerie Sélective</span>
+            <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white" data-cms="pf_title">Œuvres Majeures</h2>
+          </div>
+          <p class="text-gray-400 text-sm max-w-md mt-4 md:mt-0">Une immersion dans nos captations les plus saisissantes à travers la photographie d'art et la cinématographie.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="public-portfolio-grid">
+          <!-- Dynamique via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section id="contact" class="py-28 bg-navy-dark relative">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-12 gap-12 bg-navy border border-gold/30 rounded-3xl p-8 sm:p-12 shadow-2xl">
+          <div class="lg:col-span-5 space-y-8">
+            <div>
+              <span class="text-xs uppercase tracking-[0.3em] text-gold font-semibold">Contact Exclusif</span>
+              <h2 class="font-serif text-4xl font-bold text-white mt-2">Concrétisons Votre Vision</h2>
+            </div>
+            <p class="text-gray-300 text-sm leading-relaxed" data-cms="contact_desc">
+              Confiez-nous vos projets les plus ambitieux. Notre équipe réagit sous 24h ouvrées.
+            </p>
+
+            <div class="space-y-4">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">📍</div>
+                <div><p class="text-xs text-gray-400 uppercase">Studio Principal</p><p class="text-white text-sm font-medium" data-cms="contact_addr">Abidjan, Côte d'Ivoire</p></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">✉️</div>
+                <div><p class="text-xs text-gray-400 uppercase">Email Direct</p><p class="text-white text-sm font-medium" data-cms="contact_email">contact@shootmanstudios.com</p></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">📞</div>
+                <div><p class="text-xs text-gray-400 uppercase">Téléphone & WhatsApp</p><p class="text-white text-sm font-medium" data-cms="contact_phone">+225 07 00 00 00 00</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7">
+            <form id="public-contact-form" onsubmit="submitPublicForm(event)" class="space-y-4">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Votre Nom / Entreprise *</label>
+                  <input type="text" id="c-name" required class="w-full bg-navy-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none transition text-sm">
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Email *</label>
+                  <input type="email" id="c-email" required class="w-full bg-navy-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none transition text-sm">
+                </div>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Téléphone</label>
+                  <input type="tel" id="c-phone" class="w-full bg-navy-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none transition text-sm">
+                </div>
+                <div>
+                  <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Prestation Souhaitée</label>
+                  <select id="c-service" class="w-full bg-navy-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none transition text-sm">
+                    <option value="Photographie">Photographie Studio / Outdoor</option>
+                    <option value="Vidéographie">Vidéographie & Cinéma</option>
+                    <option value="Événementiel">Couverture Événementielle</option>
+                    <option value="Photo Sportive">Photo Sportive</option>
+                    <option value="Scolaire">Services Scolaires & Diplômes</option>
+                    <option value="Entreprises">Corporate & Entreprises</option>
+                    <option value="Drone">Captation Drone Aerial</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Détails du projet *</label>
+                <textarea id="c-msg" rows="4" required class="w-full bg-navy-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none transition text-sm" placeholder="Date, lieu, type de couverture..."></textarea>
+              </div>
+
+              <button type="submit" class="w-full py-4 bg-gold text-navy font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-gold-light transition shadow-lg shadow-gold/20">
+                Envoyer la Demande Privée
+              </button>
+              <p id="c-success" class="hidden text-emerald-400 text-xs text-center font-semibold pt-2">✓ Votre message a été transmis directement au studio !</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER AVEC LIEN ADMIN SÉCURISÉ DISCRET -->
+    <footer class="bg-navy-dark border-t border-white/10 py-12 text-center text-xs text-gray-500">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>© 2025 SHOOTMAN STUDIOS. Tous droits réservés.</p>
+        <p class="text-gold" data-cms="foot_about">Gardien du secret de l'image — Excellence Audiovisuelle</p>
+        <!-- LIEN ACCÈS SÉCURISÉ POUR L'ADMINISTRATEUR (Secret & Discret) -->
+        <button onclick="openLoginModal()" class="text-gray-600 hover:text-gold transition-colors text-[10px] tracking-widest uppercase">
+          🔒 Accès Restreint Admin
+        </button>
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- =================================================================== -->
+  <!-- 🔐 MODALE DE CONNEXION SÉCURISÉE ADMINISTRATEUR                    -->
+  <!-- =================================================================== -->
+  <div id="login-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-navy-dark/90 backdrop-blur-xl">
+    <div class="glass-modal w-full max-w-md p-8 rounded-3xl shadow-2xl relative space-y-6">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+      
+      <div class="text-center space-y-2">
+        <svg class="w-12 h-12 mx-auto text-gold" viewBox="0 0 100 100">
+          <path d="M30 25 L35 15 L42 22 L50 10 L58 22 L65 15 L70 25 L70 32 L30 32 Z" fill="#F5B82E"/>
+          <path d="M50 35 L75 48 L75 75 L50 90 L25 75 L25 48 Z" fill="#F5B82E"/>
+        </svg>
+        <h3 class="font-serif text-2xl font-bold text-white">Espace d'Administration</h3>
+        <p class="text-xs text-gray-400">Veuillez vous authentifier pour accéder au CRM Odoo et à la gestion globale.</p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Identifiant Admin</label>
+          <input type="text" id="admin-user" required class="w-full bg-navy-dark border border-white/20 rounded-xl px-4 py-3 text-white focus:border-gold outline-none text-sm">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Mot de passe</label>
+          <input type="password" id="admin-pass" required class="w-full bg-navy-dark border border-white/20 rounded-xl px-4 py-3 text-white focus:border-gold outline-none text-sm">
+        </div>
+
+        <p id="login-error" class="hidden text-rose-500 text-xs font-semibold text-center">Identifiant ou mot de passe incorrect.</p>
+
+        <button type="submit" class="w-full py-4 bg-gold text-navy font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-gold-light transition shadow-lg shadow-gold/20">
+          Se Connecter au Système
+        </button>
+      </form>
+      
+      <p class="text-[10px] text-gray-500 text-center">Raccourci accès rapide : <span class="text-gold">Ctrl + Shift + A</span></p>
+    </div>
+  </div>
+
+
+  <!-- =================================================================== -->
+  <!-- 💼 PANNEAU D'ADMINISTRATION SECRETE (PROTÉGÉ)                      -->
+  <!-- =================================================================== -->
+  <div id="admin-panel" class="min-h-screen bg-slate-900 hidden text-gray-100">
+    <div class="flex h-screen overflow-hidden">
+
+      <!-- SIDEBAR -->
+      <aside class="w-64 bg-navy-dark border-r border-slate-800 flex flex-col justify-between p-4">
+        <div class="space-y-8">
+          <div class="flex items-center gap-3 px-2">
+            <svg class="w-8 h-8 text-gold" viewBox="0 0 100 100">
+              <path d="M30 25 L35 15 L42 22 L50 10 L58 22 L65 15 L70 25 L70 32 L30 32 Z" fill="#F5B82E"/>
+              <path d="M50 35 L75 48 L75 75 L50 90 L25 75 L25 48 Z" fill="#F5B82E"/>
+            </svg>
+            <div>
+              <p class="font-serif font-bold text-white text-sm">SHOOTMAN</p>
+              <p class="text-[9px] text-gold uppercase tracking-widest">Master Console</p>
+            </div>
+          </div>
+
+          <nav class="space-y-1 text-xs">
+            <button onclick="showAdminTab('dash')" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-gray-400 hover:bg-white/5 active" id="tab-dash">
+              📊 Vue d'ensemble
+            </button>
+            <button onclick="showAdminTab('crm')" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-gray-400 hover:bg-white/5" id="tab-crm">
+              📌 CRM Pipeline (Odoo)
+            </button>
+            <button onclick="showAdminTab('sales')" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-gray-400 hover:bg-white/5" id="tab-sales">
+              💰 Situation & Ventes
+            </button>
+            <button onclick="showAdminTab('cms')" class="admin-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-gray-400 hover:bg-white/5" id="tab-cms">
+              🛠️ Gestion Contenu CMS
+            </button>
+          </nav>
+        </div>
+
+        <div class="space-y-3">
+          <div class="p-3 bg-navy rounded-xl border border-white/5 text-xs text-center">
+            <p class="text-gray-400 text-[10px]">Session Administrateur</p>
+            <p class="text-gold font-bold">Connecté</p>
+          </div>
+          <button onclick="logoutAdmin()" class="w-full py-2.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold text-xs rounded-xl hover:bg-rose-500 hover:text-white transition">
+            Déconnexion
+          </button>
+        </div>
+      </aside>
+
+      <!-- CONTENT MAIN -->
+      <main class="flex-1 overflow-y-auto bg-slate-900 p-8">
+
+        <!-- DASHBOARD -->
+        <div id="admin-dash" class="space-y-8">
+          <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold font-serif text-white">Tableau de Bord Exécutif</h1>
+            <span class="text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full bg-emerald-500/10">● Base Sécurisée</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-navy p-6 rounded-2xl border border-white/10">
+              <p class="text-xs text-gray-400 uppercase">Chiffre d'Affaires</p>
+              <p class="text-3xl font-serif font-bold text-gold mt-2">14,250,000 FCFA</p>
+            </div>
+            <div class="bg-navy p-6 rounded-2xl border border-white/10">
+              <p class="text-xs text-gray-400 uppercase">Opportunités CRM</p>
+              <p class="text-3xl font-serif font-bold text-white mt-2" id="dash-leads-count">0</p>
+            </div>
+            <div class="bg-navy p-6 rounded-2xl border border-white/10">
+              <p class="text-xs text-gray-400 uppercase">Projets Confirmés</p>
+              <p class="text-3xl font-serif font-bold text-emerald-400 mt-2">6</p>
+            </div>
+            <div class="bg-navy p-6 rounded-2xl border border-white/10">
+              <p class="text-xs text-gray-400 uppercase">Satisfaction Client</p>
+              <p class="text-3xl font-serif font-bold text-gold mt-2">99.8%</p>
+            </div>
+          </div>
+
+          <div class="bg-navy p-6 rounded-2xl border border-white/10">
+            <h3 class="text-sm font-bold text-white mb-4">Analyse Financière Mensuelle</h3>
+            <div class="h-64">
+              <canvas id="salesChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- CRM PIPELINE ODOO-STYLE -->
+        <div id="admin-crm" class="space-y-6 hidden">
+          <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold font-serif text-white">Pipeline Commercial (Odoo CRM)</h1>
+            <button onclick="addNewLeadPrompt()" class="px-4 py-2 bg-gold text-navy font-bold text-xs rounded-xl hover:bg-gold-light">
+              + Ajouter Opportunité
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 overflow-x-auto pb-4">
+            <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700">
+              <span class="text-xs font-bold uppercase text-blue-400 block mb-4">Nouveau / Site Web</span>
+              <div class="space-y-3" id="col-new"></div>
+            </div>
+            <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700">
+              <span class="text-xs font-bold uppercase text-amber-400 block mb-4">Qualifié / RDV</span>
+              <div class="space-y-3" id="col-qual"></div>
+            </div>
+            <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700">
+              <span class="text-xs font-bold uppercase text-purple-400 block mb-4">Devis Envoyé</span>
+              <div class="space-y-3" id="col-prop"></div>
+            </div>
+            <div class="bg-slate-800/60 p-4 rounded-xl border border-slate-700">
+              <span class="text-xs font-bold uppercase text-emerald-400 block mb-4">Gagné & Payé</span>
+              <div class="space-y-3" id="col-won"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VENTES -->
+        <div id="admin-sales" class="space-y-6 hidden">
+          <h1 class="text-2xl font-bold font-serif text-white">Registre des Ventes & Factures</h1>
+          <div class="bg-navy rounded-2xl border border-white/10 overflow-hidden">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800 text-gray-400 uppercase">
+                <tr>
+                  <th class="p-4">Réf Facture</th>
+                  <th class="p-4">Client</th>
+                  <th class="p-4">Prestation</th>
+                  <th class="p-4">Montant</th>
+                  <th class="p-4">Statut</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-gray-300" id="sales-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CMS CONTROL PANEL -->
+        <div id="admin-cms" class="space-y-6 hidden">
+          <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold font-serif text-white">Gestion de Contenu en Direct (CMS)</h1>
+            <button onclick="saveCMS()" class="px-6 py-2 bg-gold text-navy font-bold text-xs rounded-xl shadow-lg">
+              💾 Enregistrer & Modifier le Site Directement
+            </button>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-navy p-6 rounded-2xl border border-white/10 space-y-4">
+              <h3 class="text-gold font-bold text-sm">Contenu Section Principale</h3>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">Badge de Localisation</label>
+                <input type="text" id="cms-input-hero_location" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">Grand Titre (HTML)</label>
+                <textarea id="cms-input-hero_title" rows="2" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">Description Hero</label>
+                <textarea id="cms-input-hero_desc" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white"></textarea>
+              </div>
+            </div>
+
+            <div class="bg-navy p-6 rounded-2xl border border-white/10 space-y-4">
+              <h3 class="text-gold font-bold text-sm">Gestion des URL d'Images</h3>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">URL Image Hero (Studio)</label>
+                <input type="text" id="cms-input-hero_img" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">URL Image À Propos (Vidéaste)</label>
+                <input type="text" id="cms-input-about_img" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- =================================================================== -->
+  <!-- ⚙️ MOTEUR JAVASCRIPT & SÉCURITÉ                                     -->
+  <!-- =================================================================== -->
+  <script>
+    // CREDENTIALS PAR DÉFAUT
+    const DEFAULT_USER = 'admin';
+    const DEFAULT_PASS = 'shootman2025';
+
+    // DONNÉES INITIALES
+    const DEFAULT_SERVICES = [
+      { id: 1, title: 'Photographie Studio', tag: 'Portraits & Mode', desc: 'Captation sous éclairage de précision pour modèles, artistes et personnalités.', img: 'https://images.unsplash.com/photo-1531123897727-8f129e1b40ce?auto=format&fit=crop&w=600&q=80' },
+      { id: 2, title: 'Vidéographie & Cinéma', tag: 'Films & Clips', desc: 'Réalisation de films institutionnels, vidéoclips et documentaires en qualité 4K/8K.', img: 'https://images.unsplash.com/photo-1589134707248-e8faecf2cb09?auto=format&fit=crop&w=600&q=80' },
+      { id: 3, title: 'Couverture Événementielle', tag: 'Grands Événements', desc: 'Immortalisation de mariages somptueux, galas d’état et lancements majeurs.', img: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=600&q=80' },
+      { id: 4, title: 'Photo Sportive', tag: 'Haute Vitesse', desc: 'Action intense et précision millimétrique lors de compétitions sportives.', img: 'https://images.unsplash.com/photo-1551266188-7ee82c44ee6c?auto=format&fit=crop&w=600&q=80' }
+    ];
+
+    const DEFAULT_PORTFOLIO = [
+      { id: 1, title: 'Royal Wedding Heritage', cat: 'Événementiel', img: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80' },
+      { id: 2, title: 'Corporate Leadership', cat: 'Portrait Business', img: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80' },
+      { id: 3, title: 'Cinematic Fashion Week', cat: 'Mode & Studio', img: 'https://images.unsplash.com/photo-1531123897727-8f129e1b40ce?auto=format&fit=crop&w=800&q=80' }
+    ];
+
+    const DEFAULT_LEADS = [
+      { id: 1, name: 'Ministère de la Culture', service: 'Couverture Gala', val: '4,500,000 FCFA', stage: 'qual' },
+      { id: 2, name: 'Orange Côte d\'Ivoire', service: 'Vidéo Pub Corporate', val: '8,000,000 FCFA', stage: 'prop' },
+      { id: 3, name: 'Mariage M. & Mme KOFFI', service: 'Pack Prestige Full', val: '2,500,000 FCFA', stage: 'won' }
+    ];
+
+    const DEFAULT_SALES = [
+      { ref: 'INV-2025-001', client: 'Orange Côte d\'Ivoire', service: 'Campagne Vidéo 4K', amount: '8,000,000 FCFA', status: 'Payé' },
+      { ref: 'INV-2025-002', client: 'Mariage Koffi', service: 'Photo & Film Mariage', amount: '2,500,000 FCFA', status: 'Payé' },
+      { ref: 'INV-2025-003', client: 'Groupe SIFCA', service: 'Portraits Comité Direction', amount: '3,750,000 FCFA', status: 'En Attente' }
+    ];
+
+    // INITIALISATION LOCAL STORAGE
+    if(!localStorage.getItem('sm_leads')) localStorage.setItem('sm_leads', JSON.stringify(DEFAULT_LEADS));
+    if(!localStorage.getItem('sm_sales')) localStorage.setItem('sm_sales', JSON.stringify(DEFAULT_SALES));
+
+    // ACCÈS ET MODALE AUTHENTIFICATION
+    function openLoginModal() {
+      document.getElementById('login-modal').classList.remove('hidden');
+    }
+
+    function closeLoginModal() {
+      document.getElementById('login-modal').classList.add('hidden');
+      document.getElementById('login-error').classList.add('hidden');
+    }
+
+    // AUTHENTIFICATION SÉCURISÉE
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('admin-user').value;
+      const p = document.getElementById('admin-pass').value;
+
+      if(u === DEFAULT_USER && p === DEFAULT_PASS) {
+        sessionStorage.setItem('sm_authenticated', 'true');
+        closeLoginModal();
+        showAdminPanel();
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('sm_authenticated');
+      document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('public-site').classList.remove('hidden');
+    }
+
+    function showAdminPanel() {
+      document.getElementById('public-site').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+      renderCRM();
+      renderSales();
+      initChart();
+    }
+
+    // RACCOURCI CLAVIER SECRET (CTRL + SHIFT + A)
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        if(sessionStorage.getItem('sm_authenticated') === 'true') {
+          showAdminPanel();
+        } else {
+          openLoginModal();
+        }
+      }
+    });
+
+    // ONGLETS ADMIN
+    function showAdminTab(tabName) {
+      ['dash', 'crm', 'sales', 'cms'].forEach(t => {
+        document.getElementById(`admin-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).classList.remove('bg-white/10', 'text-gold');
+      });
+      document.getElementById(`admin-${tabName}`).classList.remove('hidden');
+      document.getElementById(`tab-${tabName}`).classList.add('bg-white/10', 'text-gold');
+    }
+
+    // RENDU DU SITE PUBLIC
+    function renderPublicServices() {
+      const grid = document.getElementById('public-services-grid');
+      grid.innerHTML = DEFAULT_SERVICES.map(s => `
+        <div class="group bg-navy border border-white/10 rounded-2xl overflow-hidden hover:border-gold/50 transition duration-500">
+          <div class="h-48 overflow-hidden">
+            <img src="${s.img}" alt="${s.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-bold text-gold uppercase tracking-widest">${s.tag}</span>
+            <h3 class="font-serif text-xl font-bold text-white mt-1 mb-2">${s.title}</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">${s.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderPublicPortfolio() {
+      const grid = document.getElementById('public-portfolio-grid');
+      grid.innerHTML = DEFAULT_PORTFOLIO.map(p => `
+        <div class="group relative rounded-2xl overflow-hidden border border-white/10 h-80">
+          <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-dark via-navy-dark/30 to-transparent opacity-80"></div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <span class="text-[10px] uppercase tracking-widest text-gold font-bold">${p.cat}</span>
+            <h3 class="font-serif text-xl font-bold text-white mt-1">${p.title}</h3>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // SOUMISSION FORMULAIRE CLIENT VERS LE CRM
+    function submitPublicForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('c-name').value;
+      const service = document.getElementById('c-service').value;
+      
+      const leads = JSON.parse(localStorage.getItem('sm_leads') || '[]');
+      leads.push({ id: Date.now(), name: name, service: service, val: 'Sur devis', stage: 'new' });
+      localStorage.setItem('sm_leads', JSON.stringify(leads));
+
+      document.getElementById('c-success').classList.remove('hidden');
+      document.getElementById('public-contact-form').reset();
+    }
+
+    // PIPELINE CRM ODOO
+    function renderCRM() {
+      const leads = JSON.parse(localStorage.getItem('sm_leads') || '[]');
+      const cols = { new: 'col-new', qual: 'col-qual', prop: 'col-prop', won: 'col-won' };
+      
+      Object.keys(cols).forEach(k => document.getElementById(cols[k]).innerHTML = '');
+      document.getElementById('dash-leads-count').textContent = leads.length;
+
+      leads.forEach(l => {
+        const card = document.createElement('div');
+        card.className = "bg-navy p-4 rounded-xl border border-white/10 space-y-2";
+        card.innerHTML = `
+          <p class="font-bold text-white text-sm">${l.name}</p>
+          <p class="text-xs text-gold font-medium">${l.service}</p>
+          <p class="text-xs text-gray-400 font-mono">${l.val}</p>
+        `;
+        const target = document.getElementById(cols[l.stage] || 'col-new');
+        if(target) target.appendChild(card);
+      });
+    }
+
+    function addNewLeadPrompt() {
+      const name = prompt("Nom du Client / Entreprise :");
+      if(!name) return;
+      const service = prompt("Service souhaité :");
+      const val = prompt("Valeur estimée (ex: 3,000,000 FCFA) :");
+
+      const leads = JSON.parse(localStorage.getItem('sm_leads') || '[]');
+      leads.push({ id: Date.now(), name, service: service || 'Photographie', val: val || 'A déterminer', stage: 'new' });
+      localStorage.setItem('sm_leads', JSON.stringify(leads));
+      renderCRM();
+    }
+
+    // VENTES
+    function renderSales() {
+      const sales = JSON.parse(localStorage.getItem('sm_sales') || '[]');
+      const tbody = document.getElementById('sales-table-body');
+      tbody.innerHTML = sales.map(s => `
+        <tr class="hover:bg-white/5">
+          <td class="p-4 font-mono text-gold">${s.ref}</td>
+          <td class="p-4 font-bold text-white">${s.client}</td>
+          <td class="p-4">${s.service}</td>
+          <td class="p-4 font-bold">${s.amount}</td>
+          <td class="p-4"><span class="px-2 py-1 rounded text-[10px] font-bold ${s.status === 'Payé' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${s.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // GRAPHIQUE
+    let chartInstance = null;
+    function initChart() {
+      if(chartInstance) return;
+      const ctx = document.getElementById('salesChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+          datasets: [{
+            label: 'Revenus (FCFA)',
+            data: [2500000, 4100000, 3200000, 6800000, 5400000, 8000000],
+            borderColor: '#F5B82E',
+            backgroundColor: 'rgba(245, 184, 46, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
+
+    // CURSEUR PERSONNALISÉ
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    window.addEventListener('mousemove', (e) => {
+      dot.style.transform = `translate(${e.clientX - 6}px, ${e.clientY - 6}px)`;
+      ring.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+    });
+
+    // CHARGEMENT INITIAL
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPublicServices();
+      renderPublicPortfolio();
+    });
+  </script>
+</body>
+</html>
